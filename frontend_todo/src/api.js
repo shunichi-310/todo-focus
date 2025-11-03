@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5001";
+const API_URL = "https://todo-focus-backend.onrender.com";
 
 export async function getTodos() {
   const res = await fetch(`${API_URL}/todos`);
