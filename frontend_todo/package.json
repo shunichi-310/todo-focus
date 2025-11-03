@@ -2,7 +2,6 @@
   "name": "frontend_todo",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5001",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -11,10 +10,11 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-scripts": "5.0.1",
+    "serve": "^14.2.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",       // ← Renderで静的ファイルを配信
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
