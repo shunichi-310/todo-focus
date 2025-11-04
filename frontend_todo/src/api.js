@@ -1,24 +1,30 @@
-const API_URL = "https://todo-focus-backend.onrender.com";
+// API接続設定（開発：localhost / 本番：Render）
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://todo-focus-backend.onrender.com"
+    : "http://localhost:5001";
 
-export async function getTodos() {
+export const getTodos = async () => {
   const res = await fetch(`${API_URL}/todos`);
-  return await res.json();
-}
+  return res.json();
+};
 
-export async function addTodo(task) {
+export const addTodo = async (task) => {
   const res = await fetch(`${API_URL}/todos`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ task }),
   });
-  return await res.json();
-}
+  return res.json();
+};
 
-export async function toggleTodo(id) {
-  const res = await fetch(`${API_URL}/todos/${id}/complete`, { method: "PUT" });
-  return await res.json();
-}
+export const toggleTodo = async (id) => {
+  const res = await fetch(`${API_URL}/todos/${id}/complete`, {
+    method: "PUT",
+  });
+  return res.json();
+};
 
-export async function deleteTodo(id) {
+export const deleteTodo = async (id) => {
   await fetch(`${API_URL}/todos/${id}`, { method: "DELETE" });
-}
+};
