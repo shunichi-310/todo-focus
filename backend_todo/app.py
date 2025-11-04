@@ -135,4 +135,7 @@ with app.app_context():
 # メイン起動
 # ========================
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Renderが指定したポート番号を取得
+    app.run(host="0.0.0.0", port=port)
+
