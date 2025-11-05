@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getTodos, addTodo, toggleTodo, deleteTodo } from "./api";
+import {
+  getTodos,
+  addTodo,
+  toggleTodo,
+  deleteTodo,
+  getStats,
+} from "./api";
 import FocusTimer from "./components/FocusTimer";
 import StatsChart from "./components/StatsChart";
 import "./index.css";
@@ -10,13 +16,13 @@ function App() {
   const [isNight, setIsNight] = useState(false);
   const [stats, setStats] = useState([]);
 
+  // ✅ 初期読み込み（ToDoと統計）
   useEffect(() => {
     getTodos().then(setTodos);
-    fetch("http://localhost:5001/stats")
-      .then((res) => res.json())
-      .then(setStats);
+    getStats().then(setStats);
   }, []);
 
+  // ✅ 昼夜テーマ自動切替
   useEffect(() => {
     const updateTheme = () => {
       const hour = new Date().getHours();
@@ -27,6 +33,7 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // ✅ ToDo追加
   const handleAdd = async () => {
     if (!task.trim()) return;
     const newTodo = await addTodo(task);
@@ -34,28 +41,31 @@ function App() {
     setTask("");
   };
 
+  // ✅ 完了トグル
   const handleToggle = async (id) => {
     const updated = await toggleTodo(id);
     setTodos(todos.map((t) => (t.id === id ? updated : t)));
     updateStats();
   };
 
+  // ✅ 削除
   const handleDelete = async (id) => {
     await deleteTodo(id);
     setTodos(todos.filter((t) => t.id !== id));
     updateStats();
   };
 
+  // ✅ 統計更新
   const updateStats = () => {
-    fetch("http://localhost:5001/stats")
-      .then((res) => res.json())
-      .then(setStats);
+    getStats().then(setStats);
   };
 
+  // ✅ タイマー完了時の統計更新
   const handleFocusFinish = () => {
     updateStats();
   };
 
+  // ✅ 進捗率
   const total = todos.length;
   const done = todos.filter((t) => t.complete).length;
   const progress = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -86,7 +96,7 @@ function App() {
           <div
             className={`h-3 rounded-full transition-all duration-500 ${
               isNight ? "bg-yellow-400" : "bg-blue-600"
-            }`} 
+            }`}
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -160,7 +170,7 @@ function App() {
       </div>
 
       {/* グラフ */}
-      <div className="w-full flex justify-center overflow-hidden">  {/* ←ここに overflow-hidden */}
+      <div className="w-full flex justify-center overflow-hidden">
         <div className="w-full max-w-md">
           <StatsChart stats={stats} />
         </div>
