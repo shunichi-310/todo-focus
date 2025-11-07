@@ -4,19 +4,14 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # ✅ CORS明示許可
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# ========================
 # データベース設定
-# ========================
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///todos.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-
-# ========================
 # モデル定義
-# ========================
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(200), nullable=False)
@@ -30,9 +25,7 @@ class Stat(db.Model):
     focus_sessions = db.Column(db.Integer, default=0)
 
 
-# ========================
 # Todo関連エンドポイント
-# ========================
 @app.route("/")
 def home():
     return jsonify({"status": "ok", "message": "Backend is running!"})
@@ -113,16 +106,11 @@ def get_stats():
     ][::-1])
 
 
-# ========================
 # DB初期化
-# ========================
 with app.app_context():
     db.create_all()
 
-
-# ========================
-# メイン起動部分（←これがなかった！）
-# ========================
+# メイン起動部分
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5001))

@@ -1,11 +1,9 @@
 // src/api.js
-// ========================
 // API接続設定（開発：localhost / 本番：Render）
-// ========================
 const API_URL =
   process.env.NODE_ENV === "production"
     ? "https://todo-focus-backend.onrender.com" // Render用
-    : "http://localhost:5001"; // ← ローカルでFlaskが動いているポート
+    : "http://localhost:5001"; // ローカルでFlaskが動いているポート
 
 export const getTodos = async () => {
   const res = await fetch(`${API_URL}/todos`);
@@ -32,7 +30,7 @@ export const deleteTodo = async (id) => {
   await fetch(`${API_URL}/todos/${id}`, { method: "DELETE" });
 };
 
-// ✅ 統計データ取得
+// 統計データ取得
 export const getStats = async () => {
   const res = await fetch(`${API_URL}/stats`);
   return res.json();

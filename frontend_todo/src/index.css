@@ -20,31 +20,3 @@ input::placeholder {
   fill: transparent !important;
   stroke: none !important;
 }
-
-/* Recharts 白背景除去 */
-.recharts-surface {
-  background: transparent !important;
-}
-
-/* --- Recharts 全背景透明化・最上位強制 --- */
-.recharts-surface,
-.recharts-wrapper,
-.recharts-bar-background,
-.recharts-bar-background rect,
-.recharts-bar-background path,
-.recharts-layer.recharts-bar-background,
-.recharts-layer.recharts-bar-rectangle rect {
-  fill: transparent !important;
-  background: transparent !important;
-  stroke: none !important;
-}
-
-.recharts-rectangle {
-  stroke: none !important;
-}
-
-/* 念のため、SVG自体の背景を透明化 */
-svg.recharts-surface {
-  background: transparent !important;
-  fill: transparent !important;
-}

@@ -19,7 +19,6 @@ export default function StatsChart({ stats }) {
 
   const todayStr = new Date().toISOString().split("T")[0];
 
-  // ✅ 直近7日分を生成（欠けてる日は0）
   const today = new Date();
   const days = [...Array(7)].map((_, i) => {
     const d = new Date(today);
@@ -38,7 +37,7 @@ export default function StatsChart({ stats }) {
 
   return (
     <div className="bg-[#404550] rounded-2xl shadow-lg p-6 flex flex-col items-center text-center overflow-hidden">
-      {/* ✅ タイトル */}
+      {/* タイトル */}
       <h2 className="text-yellow-400 font-bold text-2xl mb-2">
         Completed
       </h2>
@@ -63,16 +62,16 @@ export default function StatsChart({ stats }) {
               backgroundColor: "#404550",
               border: "1px solid #555962",
               borderRadius: "8px",
-              color: "#facc15",
+              color: "#f3cd49",
             }}
-            labelStyle={{ color: "#facc15" }}
+            labelStyle={{ color: "#f3cd49" }}
           />
           <Bar
             dataKey="Completed"
-            fill="#fde047"
+            fill="#f3cd49"
             radius={[8, 8, 0, 0]}
             background={false}
-            activeBar={{ fill: "#eab308" }}
+            activeBar={{ fill: "#f3cd49" }}
           />
         </BarChart>
       </ResponsiveContainer>
