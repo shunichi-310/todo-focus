@@ -16,7 +16,7 @@ https://todo-focus-frontend.onrender.com
 - Flask API　+ React　フロントをRnder上で公開
 - ユーザごとに独立しており、SQLiteによりデータを保存
 
-##　使用技術
+## 使用技術
 
 ### フロントエンド
 
