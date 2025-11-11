@@ -134,7 +134,7 @@ const FocusTimer = () => {
           onClick={handlePiP}
           className="px-8 py-3 bg-yellow-400 hover:bg-yellow-400 text-black font-semibold rounded-xl shadow-md"
         >
-          PiP表示
+          最小表示
         </button>
 
         <button
