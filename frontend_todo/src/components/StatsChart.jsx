@@ -8,17 +8,28 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function StatsChart({ stats }) {
-  // 今日の日付文字列
-  const todayStr = new Date().toISOString().split("T")[0];
+// ★ ローカル日付を正しく文字列に変換する関数（タイムゾーンずれ対策）
+const getLocalDateStr = (date = new Date()) =>
+  new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split("T")[0];
 
-  // 直近7日分のデータを作成
+export default function StatsChart({ stats }) {
+  // 今日の日付（ローカル）
+  const todayStr = getLocalDateStr();
+
+  // 直近7日分のデータを生成
   const today = new Date();
   const days = [...Array(7)].map((_, i) => {
     const d = new Date(today);
     d.setDate(today.getDate() - (6 - i));
-    const dateStr = d.toISOString().split("T")[0];
+
+    // ローカル日付文字列に変換
+    const dateStr = getLocalDateStr(d);
+
+    // APIのデータから一致する日を探す
     const found = stats?.find((s) => s.date === dateStr);
+
     return {
       date: dateStr,
       name:
@@ -37,7 +48,7 @@ export default function StatsChart({ stats }) {
       {/* タイトル */}
       <h2 className="text-yellow-400 font-bold text-2xl mb-2">Completed</h2>
 
-      {/* 空データのときメッセージ表示（グラフは残す） */}
+      {/* 空データのときでもグラフは残す */}
       {allZero && (
         <p className="text-gray-400 text-sm mb-2"></p>
       )}
