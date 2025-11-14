@@ -14,10 +14,9 @@ db = SQLAlchemy(app)
 # モデル定義
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(100), nullable=False)  # ★ユーザごとに管理
+    user_id = db.Column(db.String(100), nullable=False)
     task = db.Column(db.String(200), nullable=False)
     complete = db.Column(db.Boolean, default=False)
-
 
 class Stat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,12 +25,15 @@ class Stat(db.Model):
     completed = db.Column(db.Integer, default=0)
     focus_sessions = db.Column(db.Integer, default=0)
 
-
 # ルート
 @app.route("/")
 def home():
     return jsonify({"status": "ok", "message": "Backend is running!"})
 
+
+# ---------------------------
+# ToDo API
+# ---------------------------
 
 # ToDo取得
 @app.route("/todos", methods=["GET"])
@@ -43,7 +45,6 @@ def get_todos():
         for t in todos
     ])
 
-
 # ToDo追加
 @app.route("/todos", methods=["POST"])
 def add_todo():
@@ -52,7 +53,6 @@ def add_todo():
     db.session.add(task)
     db.session.commit()
     return jsonify({"id": task.id, "task": task.task, "complete": task.complete})
-
 
 # 完了状態切替
 @app.route("/todos/<int:id>/complete", methods=["PUT"])
@@ -82,7 +82,6 @@ def toggle_complete(id):
     db.session.commit()
     return jsonify({"id": task.id, "task": task.task, "complete": task.complete})
 
-
 # ToDo削除
 @app.route("/todos/<int:id>", methods=["DELETE"])
 def delete_todo(id):
@@ -98,7 +97,10 @@ def delete_todo(id):
     return jsonify({"result": True})
 
 
-# フォーカスセッション追加
+# ---------------------------
+# フォーカスセッション
+# ---------------------------
+
 @app.route("/focus", methods=["POST"])
 def add_focus_session():
     data = request.get_json()
@@ -115,7 +117,10 @@ def add_focus_session():
     return jsonify({"message": "Focus session added"})
 
 
-# 統計データ取得
+# ---------------------------
+# 統計取得
+# ---------------------------
+
 @app.route("/stats", methods=["GET"])
 def get_stats():
     user_id = request.args.get("user_id")
@@ -126,10 +131,33 @@ def get_stats():
     ][::-1])
 
 
+# ---------------------------
+# ★ 開発用：任意の日付の Stat を追加する API（方法A）
+# ---------------------------
+
+@app.route("/stats/add", methods=["POST"])
+def add_stat_manual():
+    data = request.get_json()
+
+    if "user_id" not in data or "date" not in data:
+        return jsonify({"error": "user_id and date are required"}), 400
+
+    stat = Stat(
+        user_id=data["user_id"],
+        date=data["date"],
+        completed=data.get("completed", 0),
+        focus_sessions=data.get("focus", 0),
+    )
+
+    db.session.add(stat)
+    db.session.commit()
+
+    return jsonify({"message": "Stat added", "data": data})
+
+
 # DB初期化
 with app.app_context():
     db.create_all()
-
 
 # メイン
 if __name__ == "__main__":
