@@ -74,6 +74,7 @@ def toggle_complete(id):
         stat = Stat(user_id=user_id, date=today, completed=0, focus_sessions=0)
         db.session.add(stat)
 
+    # 完了数の更新
     if not previous_state and task.complete:
         stat.completed += 1
     elif previous_state and not task.complete:
@@ -129,30 +130,6 @@ def get_stats():
         {"date": s.date, "completed": s.completed, "focus": s.focus_sessions}
         for s in stats
     ][::-1])
-
-
-# ---------------------------
-# ★ 開発用：任意の日付の Stat を追加する API（方法A）
-# ---------------------------
-
-@app.route("/stats/add", methods=["POST"])
-def add_stat_manual():
-    data = request.get_json()
-
-    if "user_id" not in data or "date" not in data:
-        return jsonify({"error": "user_id and date are required"}), 400
-
-    stat = Stat(
-        user_id=data["user_id"],
-        date=data["date"],
-        completed=data.get("completed", 0),
-        focus_sessions=data.get("focus", 0),
-    )
-
-    db.session.add(stat)
-    db.session.commit()
-
-    return jsonify({"message": "Stat added", "data": data})
 
 
 # DB初期化
